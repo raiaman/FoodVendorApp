@@ -1,0 +1,165 @@
+<html>
+
+<head>
+    <title>Click Food</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- <script type="text/javascript" src="C:\Users\st\OneDrive\Desktop\jquery-3.7.1.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+    <!-- <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js "></script> -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap4.min.css">
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js"></script>
+
+    <script type="text/javascript">
+        const jsonData = {
+            "selectedTable": "2",
+            "userName": null,
+            "orderItems": [
+                {
+                    "name": "Rice With Gravy",
+                    "full": 1,
+                    "half": 2
+                },
+                {
+                    "name": "Sherfa Rice",
+                    "full": 0,
+                    "half": 1
+                },
+                {
+                    "name": "Rice With Gravy",
+                    "full": 1,
+                    "half": 2
+                },
+                {
+                    "name": "Sherfa Rice",
+                    "full": 0,
+                    "half": 1
+                }
+            ]
+        };
+
+        const cardData = [
+            { tableMessage: 'No Order', tableStatus: 'bg-danger' },
+            { tableMessage: 'New Order', tableStatus: 'bg-success' },
+            { tableMessage: 'In Progress', tableStatus: 'bg-warning' }
+        ];
+
+        const arrTable = [1, 2, 3, 4, 5, 6];
+
+        $(document).ready(function () {
+
+            $("#table").DataTable({
+                "data": jsonData.orderItems,
+                "pageLength": 2,
+                "columns": [
+                    { "data": "name" },
+                    { "data": "full" },
+                    { "data": "half" }
+                ]
+            });
+
+            bindDynamicTable();
+            populateNewOrderListTableBody(jsonData);
+
+            $('.card').click(function () {
+                $('.modal-title').text($(this).find('.card-title').text());
+
+                $('.card').addClass('m-3');
+                $('.card').addClass('card-click-animation card-click-opacity');
+                $(this).removeClass('m-3 card-click-opacity');
+            });
+
+            $('#divInProgressModal .btn-success').click(function () {
+                $('#divInProgressModal').modal('hide');
+            });
+        });
+
+        function bindDynamicTable() {
+            var tblhtml = '';
+            arrTable.forEach(function (tbl, i) {
+                if (i % 3 == 0)
+                    tblhtml += '<div class="row p-2"><div class="card-group" style="width: 100%; height: 100%;">';
+                tblhtml += '<div class="card text-white bg-danger m-3" data-toggle="modal" data-target="#divInProgressModal">';
+                // tblhtml += '<h4 class="card-title text-right"><i class="circle">10</i></h4>';              
+                tblhtml += '<div class="card-body"><center><h5 class="card-title">Table ' + tbl + '</h5></center></div>';
+                tblhtml += '<div class="card-footer"><center><small>No Order</small></center></div>';
+                tblhtml += '</div>';
+                if (i % 3 == 2)
+                    tblhtml += '</div></div>';
+            });
+            $('#divTable').append(tblhtml);
+        }
+    </script>
+    <style>
+        .circle {
+            width:215px;
+            height: 25px;
+            line-height: 15px;
+            border-radius: 50%;
+            font-size: 16px;
+            color: #fff;
+            text-align: center;
+            background: #000
+        }
+        
+        .card-click-animation {
+            -moz-transition: all 0.4s ease-out;
+            -o-transition: all 0.4s ease-out;
+            -webkit-transition: all 0.4s ease-out;
+            -ms-transition: all 0.4s ease-out;
+            transition: all 0.4s ease-out;
+        }
+
+        .card-click-opacity {
+            opacity: 0.6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5" id="divTable"></div>
+    <!-- New order list -->
+    <div class="container mt-5" id="divNewOrderDetails">
+        <h1>Ordered Items</h1>
+        <table class="table" id="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Full Portion</th>
+                    <th>Half Portion</th>
+                </tr>
+            </thead>
+        </table>
+
+    </div>
+    <br>
+    <!-- In progress modal -->
+    <div class="modal" tabindex="-1" role="dialog" id="divInProgressModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="float: right;"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <center>
+                        <h5>Order Completed?</h5>
+                    </center>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success">Confirm</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
